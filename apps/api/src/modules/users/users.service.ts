@@ -82,6 +82,17 @@ export class UsersService extends CrudAbstractService<User> {
     return new PaginatedResponseDto(User, users, totalCount)
   }
 
+  async getUsersWithDetails(userIds: number[]): Promise<User[]> {
+    const results: User[] = []
+    for (const id of userIds) {
+      const user = await this.usersRepository.findOne({ where: { id } })
+      if (user) {
+        results.push(user)
+      }
+    }
+    return results
+  }
+
   /**
    * Set the value of the given user's password property given a computed hash.
    *

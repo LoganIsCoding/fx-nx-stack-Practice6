@@ -41,11 +41,11 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
     const refreshToken = request.cookies?.Refresh
     const user = await this.usersService.getByIdWithRefreshToken(payload.userId)
 
-    if (!user || !user.refreshTokenHash) {
+    if (!user) {
       throw new UnauthorizedException()
     }
 
-    const isValid = await this.authService.verifyHash(user.refreshTokenHash, refreshToken)
+    const isValid = await this.authService.verifyHash(user.refreshTokenHash as string, refreshToken)
 
     if (isValid) {
       return {

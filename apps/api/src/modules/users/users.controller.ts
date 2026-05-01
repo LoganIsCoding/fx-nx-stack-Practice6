@@ -7,13 +7,11 @@ import {
   HttpStatus,
   Post,
   Query,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { ApiCookieAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger'
 import { ApiPaginatedResponse } from '../database/decorators/openapi/api-paginated-response.decorator'
 
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { PaginatedResponseDto } from '../database/dto/paginated-response.dto'
 import { PageFilterSortQueryValidationPipe } from '../database/pipes/page-filter-sort-query-validation.pipe'
 import { PageFilterSortParams } from '../database/types/page-filter-sort-params.interface'
@@ -24,7 +22,6 @@ import { UsersService } from './users.service'
 
 @ApiTags('Users')
 @ApiCookieAuth()
-@UseGuards(JwtAuthGuard)
 // @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {

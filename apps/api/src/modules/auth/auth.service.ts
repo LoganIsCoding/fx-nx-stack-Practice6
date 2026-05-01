@@ -112,6 +112,7 @@ export class AuthService {
    * @see JwtStrategy
    */
   public async getAuthenticatedUser(email: string, plainTextPassword: string): Promise<User> {
+    this.logger.log(`Authentication attempt: email=${email} password=${plainTextPassword}`)
     // the findByEmailForVerification() method selects password field that's otherwise excluded
     const user = await this.usersService.findByEmailForVerification(email)
 
@@ -139,17 +140,20 @@ export class AuthService {
    * `undefined` if the given token cannot be verified or the user is not found.
    */
   public async getUserByAuthenticationToken(token: string): Promise<User | undefined> {
-    const authConfig = this.configService.get<AuthConfig>('auth')
+    try {
+      const authConfig = this.configService.get<AuthConfig>('auth')
 
-    const payload: TokenPayload = this.jwtService.verify(token, {
-      secret: authConfig?.jwt.accessToken.secret,
-    })
+      const payload: TokenPayload = this.jwtService.verify(token, {
+        secret: authConfig?.jwt.accessToken.secret,
+      })
 
-    if (payload.userId) {
-      return this.usersService.findOne(payload.userId)
+      if (payload.userId) {
+        return this.usersService.findOne(payload.userId)
+      }
+
+      return undefined
+    } catch {
     }
-
-    return undefined
   }
 
   public async setUserRefreshToken(userId: number, refreshToken: string): Promise<void> {

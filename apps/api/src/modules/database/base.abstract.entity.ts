@@ -2,7 +2,6 @@ import { ApiHideProperty, ApiProperty } from '@nestjs/swagger'
 import { Exclude } from 'class-transformer'
 import {
   Column,
-  Index,
   Generated,
   CreateDateColumn,
   UpdateDateColumn,
@@ -32,7 +31,6 @@ export abstract class BaseAbstractEntity {
   readonly id!: number
 
   @ApiProperty()
-  @Index({ unique: true })
   @Generated('uuid')
   @Column()
   readonly uuid!: string
